@@ -1,0 +1,4 @@
+Create one character class with two variants
+Implement melee attack animation
+Implement stun when shield is broken
+Implement working stats screen
