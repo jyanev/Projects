@@ -2,7 +2,7 @@ BattleBros is a simple 2D fighter game where the player chooses between 2 charac
 with choice between 2 player versus mode and player vs AI
 
 To run game:
-Ensure gradle is installed on your system.
+Ensure a version of gradle is installed on your system.
 In the BattleBros directory, enter the following commands into the terminal:
 To build:
 ./gradlew build
