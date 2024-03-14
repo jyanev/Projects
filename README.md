@@ -1,2 +1,2 @@
 # Projects
-school and personal projects I've worked on
+projects i've worked on
