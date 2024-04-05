@@ -1,0 +1,71 @@
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+.wrapper {
+    width: 400px;
+}
+
+.screen {
+    height: 5rem;
+    background-color: black;
+    display: flex;
+    border: 1px solid black;
+}
+
+.screen-text {
+    color: white;
+    flex-basis: 100%;
+    text-align: right;
+    align-self: center;
+    font-size: 2rem;
+    margin: 0 1rem 0 1rem;
+}
+
+.calc-buttons {
+    height: 30rem;
+    display: flex;
+}
+
+.rows {
+    font-size: 0;
+}
+
+.rows button {
+    height: 6rem;
+    width: 100px;
+    border: 1px solid black;
+    font-size: 2rem;
+}
+
+.number, .action {
+    background-color: rgb(240, 248, 255, 1);
+}
+
+.number:hover, .action:hover {
+    background-color: rgb(120, 124, 128, .3);
+}
+
+.rows [id="clear"] {
+    width: 50%;
+}
+
+.rows [id="zero"] {
+    width: 75%;
+}
+
+.rows .operation {
+    background-color: rgb(246, 179, 97);
+}
+
+.rows .operation:hover {
+    background-color: rgb(246, 179, 97, 0.5);
+}
