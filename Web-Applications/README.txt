@@ -1,1 +1,1 @@
-This directory holds all of my web-based projects written in HTML/CSS/JavaScript
+All my web-based projects written in HTML/CSS/JavaScript
