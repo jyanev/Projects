@@ -17,13 +17,14 @@ int size;
 
 
 void allocate_new_note_mem(int new_size) {
-    size = new_size;
-    notes = (char**)realloc(notes, (size * 12 * 31) * sizeof(char*));
+    
+    notes = (char**)realloc(notes, (new_size * 12 * 31) * sizeof(char*));
 
-    for (int i=0 ; i < (size * 12 * 31) ; i++) {
+    for (int i=(size * 12 * 31) ; i < (new_size * 12 * 31) ; i++) {
         notes[i] = (char*)malloc((MAX_NOTE_LENGTH + 1) * sizeof(char));
         sprintf(notes[i], "");
     }
+    size = new_size;
 }
 
 
@@ -77,7 +78,7 @@ int print_month_info(int weekday, int month, int year) {
             firstweek = 0;
         }
 
-        if (strcmp(notes[(year-1582) * (month+1) * day - 1], "") != 0) {
+        if (strcmp(notes[((year-1583) * 12 * 31) + ((month) * 31) + day - 1], "") != 0) {
             printf("\033[0;31m");
         } 
 
@@ -115,7 +116,7 @@ void process_user_input(int day, int month, int year) {
                 month = 0;
                 is_leap_year(year);
                 if (year - 1582 > size) {
-                    allocate_new_note_mem(size + 50);
+                    allocate_new_note_mem(year - 1582 + 50);
                 }
             }
             process_user_input(day, month, year);
@@ -139,8 +140,10 @@ void process_user_input(int day, int month, int year) {
             fflush(stdin);
             printf("\n\nViewing day: %d\n\n", d);
 
-            if (strcmp(notes[(year-1582) * (month+1) * d - 1], "") != 0) {
-                printf("Note:\n-----\n%s\n\n", notes[(year-1582) * (month+1) * d - 1]);
+            int index = ((year-1583) * 12 * 31) + ((month) * 31) + d  - 1;
+
+            if (strcmp(notes[index], "") != 0) {
+                printf("Note:\n-----\n%s\n\n", notes[index]);
 
                 printf("Would you like to replace this note? (y/n) : ");
                 user_input = getchar();
@@ -151,14 +154,14 @@ void process_user_input(int day, int month, int year) {
                     char buffer[MAX_NOTE_LENGTH];
                     fgets(buffer, MAX_NOTE_LENGTH+1, stdin);
                     buffer[strcspn(buffer, "\n")] = 0;
-                    notes[(year-1582) * (month+1) * d - 1] = buffer;
+                    notes[index] = buffer;
                 } else {
                     printf("Would you like to remove this note? (y/n) : ");
                     user_input = getchar();
                     fflush(stdin);
                     printf("\n\n");
                     if (user_input == 'y') {
-                        notes[(year-1582) * (month+1) * d - 1] = "";
+                        notes[index] = "";
                     }
                 }
 
@@ -173,7 +176,7 @@ void process_user_input(int day, int month, int year) {
                     char buffer[MAX_NOTE_LENGTH];
                     fgets(buffer, MAX_NOTE_LENGTH+1, stdin);
                     buffer[strcspn(buffer, "\n")] = 0;
-                    notes[(year-1582) * (month+1) * d - 1] = buffer;
+                    notes[index] = buffer;
                 }
             }
 
@@ -218,17 +221,17 @@ int main() {
     int first_day = calculate_first_day_of_month(month, year);
     is_leap_year(year);
 
-    size = (year-1582);
+    size = (year - 1582);
 
     notes = (char**)malloc((size * 12 * 31) * sizeof(char*));
-
-    FILE *save_file;
-    save_file = fopen("notes.txt","r");
 
     for (int i=0 ; i < (size * 12 * 31) ; i++) {
         notes[i] = (char*)malloc((MAX_NOTE_LENGTH + 1) * sizeof(char));
         sprintf(notes[i], "");
     }
+
+    FILE *save_file;
+    save_file = fopen("notes.txt","r");
 
     char buffer[MAX_NOTE_LENGTH+1]; 
     int result;
@@ -240,12 +243,16 @@ int main() {
             i++;
             result = fscanf(save_file, "%*c");
         } else {
-            if (result != EOF) 
+            if (result != EOF) {
+                if (i > (size * 12 * 31)) {
+                    allocate_new_note_mem(size + 50);
+                }
                 notes[i] = buffer;
+            }
         }
 
     } while(result != EOF);
-
+    fclose(save_file);
     
     
     process_user_input(first_day, month, year);
